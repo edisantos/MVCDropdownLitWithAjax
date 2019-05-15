@@ -1,0 +1,37 @@
+﻿@model MVCDropdowlist.MVC.Models.Produtos
+@{
+    ViewBag.Title = "Home Page";
+}
+<div class="container">
+    <br /><br />
+    <label>Tipo 1</label>
+     @Html.DropDownList("ProdutoId",null,htmlAttributes:new { @class ="form-control" },optionLabel:"SELECIONE")
+    <hr />
+    <label id="Total"></label>
+    <hr />
+    <label>Tipo 2</label>
+    @if (ViewBag.ProdutoId != null)
+    {
+        @Html.DropDownListFor(m=>m.ProdutoId,ViewBag.ProdutoId as SelectList,"--SELECTION--",new { @class = "form-control" })
+    }
+    <br />
+    @Html.DropDownListFor(m=>m.ProdutoId,new SelectList(""),"Select price",new {@class="form-control"})
+</div>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#ProdutoId').change(function () {
+            
+            var a = $("#ProdutoId option:Selected").text();
+            $('#Total').text(a);
+           // alert(a)
+
+            $.get("/Home/MostrarValor", { ProdutoId: $("#ProdutoId").val() }, function (data) {
+                $("#Total").empty();
+                $.each(data, function (index, row) {
+                    $("#Total").append("<option>'"+row.Valor +"'</option>")
+                });
+            });
+        });
+    });
+</script>
